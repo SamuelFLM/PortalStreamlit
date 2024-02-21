@@ -48,12 +48,12 @@ def colaborador():
         valor_meta = int(uf_metas.iloc[0])
 
     container_principal(
-        ["Total", "Em execução", "Migração concluída", "Meta Ano", "Meta Mensal"],
+        ["Total", "Em execução", "Migração concluída Mês Corrente", "Meta Até Mês Recorrente", "Meta Mês Corrente"],
         [
             total_filtro_status,
             len(status_em_execução),
             len(status_migracao_concluida),
-            valor_meta * 12,
+            2000,
             valor_meta,
         ],
         ["orange", "red", "green", "blue", "blue"],
@@ -63,7 +63,7 @@ def colaborador():
     )
     with detalhes:
         contagem_un, contagem_operacao = _contagem_os(df_status)
-        col1, col2, col3 = st.columns([0.6, 0.4, 0.1])
+        col1, col2 = st.columns([0.8, 0.4])
         _container_status_detalhado(
             df_atual,
             col1,
@@ -87,7 +87,7 @@ def colaborador():
 
     with controle_de_reparo:
 
-        col1, col2, col3, col4, col5 = st.columns([0.53, 0.5, 0.4, 0.4, 0.6])
+        col1, col2, col3, col4 = st.columns(4)
         colaborador_reparo = df_reparos[df_reparos["Colaborador_Oi"] == colaborador]
         contem = colaborador_reparo[colaborador_reparo["Leonam_2024"] == "Sim"][
             "Leonam_2024"
@@ -118,15 +118,15 @@ def colaborador():
         base_mes_meta = _base_mes_meta(df_atual, valor_meta, colaborador)
 
         if colaborador != "Selecione":
-            col1, col2, col3, col4 = st.columns([0.2, 0.4, 0.4, 0.4])
+            col1, col2, col3, col4 = st.columns(4)
             df_migracao = df[df["STATUS DETALHADO"] == "MIGRAÇÃO CONCLUÍDA"]
             meses = list(df_migracao["MÊS CONCLUSÃO"].unique())
             meses.append("Selecione")
             mes = col1.selectbox("Mês", meses, index=(len(meses) - 1))
 
             df_mes = df_colaborador[df_colaborador["MÊS CONCLUSÃO"] == mes]
-            col1, col2, col3, col4 = st.columns([0.9, 0.8, 0.3, 0.1])
-            col1.dataframe(base_mes_meta, hide_index=True)
+            col1, col2, col3 = st.columns([1,0.9,0.3])
+            col1.table(base_mes_meta)
             df_metas_filtro_colaborador = df_metas[
                 df_metas["Colaborador"] == colaborador.title()
             ]
@@ -150,7 +150,7 @@ def _contagem_os(df_status):
 
 
 def container_principal(titulos, valores, cores):
-    col1, col2, col3, col4, col5, col6 = st.columns([0.3, 0.3, 0.3, 0.3, 0.3, 0.75])
+    col1, col2, col3, col4, col5 = st.columns(5, gap='medium')
 
     # Loop através das colunass, títulos e valores
     for col, titulo, valor, cor in zip(
@@ -231,7 +231,6 @@ def _base_mes_meta(df_atual, valor_meta, colaborador):
         {
             # "Mês": status["MÊS CONCLUSÃO"].unique(),
             "Responsável": colaborador,
-            "Mês": ["Janeiro", "Fevereiro"],
             "Migração Concluída": status["MÊS CONCLUSÃO"].value_counts(),
             "Meta Mensal": valor_meta,
         }

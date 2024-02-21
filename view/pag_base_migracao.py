@@ -12,9 +12,9 @@ def base_migracao():
     colaborador, df_colaborador  = _filtro_tabela(df,"RESPONSÁVEL NOVA OI", col1, "Colaborador")
     status, df_status = _filtro_tabela(df_colaborador,"STATUS DETALHADO", col2, "Status Detalhado")   
     
-    col4.button("Adicionar", use_container_width=True, type='primary')
-    col5.button("Editar", use_container_width=True, type='primary' )
-    col6.button("Excluir", use_container_width=True, type='primary')
+    # col4.button("Adicionar", use_container_width=True, type='primary')
+    # col5.button("Editar", use_container_width=True, type='primary' )
+    # col6.button("Excluir", use_container_width=True, type='primary')
     
      
      

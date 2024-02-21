@@ -12,7 +12,7 @@ configuracao_pagina()
 
 iniciar_dados()
 
-col1, col2 = st.columns([0.2, 0.1])
+col1, col2 = st.columns([2, 0.1])
 
 with col1.expander("Menu", expanded=True):
     col1, col2, col3, col4, col5 = st.columns(5)

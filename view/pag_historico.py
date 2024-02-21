@@ -16,8 +16,6 @@ def historico():
 
     aplicar_espaco_entre_componentes()
 
-   
-
     if ano == "2024":
         _tabela_2024(df, df_metas)
     else:
@@ -55,10 +53,9 @@ def _tabela_2024(df, df_metas):
 
     df_mes, mes = _filtro(coluna_filtro_mes, df_historico, "Mês", "Mês")
 
-    col1, col2, col3, col4, col5, col6 = st.columns([0.9, 0.9, 0.4, 0.1, 0.2, 0.3])
+    col1, col2, col3 = st.columns([0.8,0.9,0.3])
 
     col1.dataframe(df_historico, width=400, hide_index=True)
-
     if mes != "Selecione":
         tabela_metas_historico(df, df_metas, mes, col2, col3)
        

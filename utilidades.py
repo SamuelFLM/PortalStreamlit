@@ -126,9 +126,11 @@ def tabela_metas_historico(df, df_metas, mes, col_tabela, col_filtro):
 
     if farol != "Selecione":
         df_farol_atual = df_farol_filted
+        col_tabela.table(df_farol_atual)
     else:
         df_farol_atual = df_uf
-    col_tabela.dataframe(df_farol_atual, width=460, hide_index=True)
+        # col_tabela.dataframe(df_farol_atual,height=946, hide_index=True)
+        col_tabela.table(df_farol_atual)
 
 
 def tabela_metas_colaborador(df_mes, df_metas, col_tabela, col_filtro):
@@ -161,7 +163,6 @@ def tabela_metas_colaborador(df_mes, df_metas, col_tabela, col_filtro):
     df_uf["Porcentagem"] = ((df_uf["Resultado"] / df_uf["Meta"]) * 100).round(2).astype(
         str
     ) + "%"
-    df_uf["Colaborador"] = df_metas["Colaborador"]
 
     farol = col_filtro.selectbox("Farol", ["Selecione", "🟢", "🔴"])
     df_farol_filted = df_uf[df_uf["Farol"] == farol]
@@ -170,4 +171,4 @@ def tabela_metas_colaborador(df_mes, df_metas, col_tabela, col_filtro):
         df_farol_atual = df_farol_filted
     else:
         df_farol_atual = df_uf
-    col_tabela.dataframe(df_farol_atual, width=460, hide_index=True)
+    col_tabela.dataframe(df_farol_atual, hide_index=True)
