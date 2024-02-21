@@ -4,7 +4,7 @@ from pathlib import Path
 from time import sleep
 
 PASTA_ATUAL = Path(__file__).parent
-PASTA_EXCEL = PASTA_ATUAL / "database"
+PASTA_EXCEL = PASTA_ATUAL / "a" / "database"
 PASTA_IMAGEM = PASTA_ATUAL / "img"
 
 
