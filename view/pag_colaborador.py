@@ -48,7 +48,7 @@ def colaborador():
         valor_meta = int(uf_metas.iloc[0])
 
     container_principal(
-        ["Total", "Em execução", "Migração concluída Mês Corrente", "Meta Até Mês Recorrente", "Meta Mês Corrente"],
+        ["Total", "Em execução", "Total Migração concluída", "Meta Até Mês Recorrente", "Meta Mês Corrente"],
         [
             total_filtro_status,
             len(status_em_execução),

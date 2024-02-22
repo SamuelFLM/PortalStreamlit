@@ -9,13 +9,6 @@ PASTA_IMAGEM = PASTA_ATUAL / "img"
 
 
 @st.cache_data
-def carregar_dados():
-    excel = "Controle de migração Cobre-Fibra.xlsx"
-    df_data = pd.read_excel(PASTA_EXCEL / excel, engine="openpyxl", sheet_name="LISTA")
-    return df_data
-
-
-@st.cache_data
 def carregar_dados_2023():
     excel = "Controle Migração Cobre Para Fibra fechamento 2023.xlsx"
     df_data = pd.read_excel(PASTA_EXCEL / excel, engine="openpyxl", sheet_name="LISTA")
@@ -24,23 +17,21 @@ def carregar_dados_2023():
 
 @st.cache_data
 def carregar_dados_meta():
-    excel = "SOP - Migração Cobre para Fibra B2B - Ciclo Jan24 v1.xlsx"
+    excel = "meta.xlsx"
     df_data = pd.read_excel(PASTA_EXCEL / excel, engine="openpyxl", sheet_name="METAS")
     return df_data
 
 
 @st.cache_data
 def carregar_dados_reparo():
-    excel = "Base_Rep_CB.xlsx"
+    excel = "reparo.xlsx"
     df_data = pd.read_excel(
         PASTA_EXCEL / excel, engine="openpyxl", sheet_name="Planilha1"
     )
     return df_data
 
 
-def iniciar_dados():
-    df = carregar_dados()
-    # df_2023 = carregar_dados_2023()
+def iniciar_dados(df):
     df_metas = carregar_dados_meta()
     df_reparos = carregar_dados_reparo()
 
@@ -56,10 +47,6 @@ def iniciar_dados():
     if not "pagina_central" in st.session_state:
         st.session_state["pagina_central"] = "pag_home"
 
-    # if not "dados_excel_2023" in st.session_state:
-    #     st.session_state["dados_2023"] = df_2023
-
-
 def mudar_pagina(pagina):
     st.session_state["pagina_central"] = pagina
 
@@ -71,7 +58,7 @@ def carregar_elemento():
 
 def configuracao_pagina():
     st.set_page_config(
-        "Portal - Operações De Terceiros", page_icon="img\\oi_logo.png", layout="wide"
+        "Portal - Operações De Terceiros",layout="wide"
     )
 
 
