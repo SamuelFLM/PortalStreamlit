@@ -19,23 +19,31 @@ def colaborador():
     df_metas = st.session_state["dados_metas"]
     df_reparos = st.session_state["dados_reparos"]
 
-    selectbox_colaborador, selectbox_data, col3 = st.columns([0.3,0.3,0.5])
-    colaborador, df_colaborador = _filtro_colaborador(df, selectbox_colaborador)
-
+    col_colaborador, col_data, col3 = st.columns([0.3, 0.3, 1])
+    colaborador, df_colaborador = _filtro_colaborador(df, col_colaborador)
+    data_conclusao = col_data.selectbox("Migração concluída Mês", ["Selecione","01/2024", "02/2024"])
+    
+    
+    
     if colaborador == "Selecione":
         df_atual = df
     else:
         df_atual = df_colaborador
     total_filtro_status = len(df_atual["STATUS DETALHADO"])
 
-    st.subheader("", divider="green")
-
     uf_metas = st.empty()
     total_metas = _filtro_metas_total(df_metas, colaborador)
     status_em_execução = _filtro_status(df_atual, colunas[0].upper())
     status_migracao_concluida = _filtro_status(df_atual, colunas[1].upper())
     df_status = df_atual[(df_atual["STATUS DETALHADO"] == "AGUARDANDO ABERTURA OS")]
-
+    
+    if data_conclusao == "Selecione":
+        valor_migracao_mes = 0
+    else:
+        valor = status_migracao_concluida[status_migracao_concluida["MÊS CONCLUSÃO"] == data_conclusao]
+        valor_migracao_mes = valor["MÊS CONCLUSÃO"].value_counts().iloc[0]
+        
+    
     if uf_metas.empty:
         if colaborador == "Selecione":
             valor_meta = 1000
@@ -48,18 +56,20 @@ def colaborador():
         [
             "Total",
             "Em execução",
-            "Total Migração concluída",
-            "Meta Até Mês Recorrente",
-            "Meta Mês Corrente",
+            "Meta Acumulada",
+            "Migração concluída Acumulada",
+            "Meta Mês",
+            "Migração concluída Mês",
         ],
         [
             total_filtro_status,
             len(status_em_execução),
-            len(status_migracao_concluida),
             2000,
+            len(status_migracao_concluida),
             valor_meta,
+            valor_migracao_mes
         ],
-        ["orange", "red", "green", "blue", "blue"],
+        ["orange", "red", "blue", "green", "blue", "green"],
     )
     detalhes, controle_de_reparo, tabela_filtrada = st.tabs(
         ["Detalhes", "Controle De Reparo", "Tabela"]
@@ -91,7 +101,7 @@ def colaborador():
     with controle_de_reparo:
 
         col1, col2, col3, col4 = st.columns(4)
-        colaborador_reparo = df_reparos[df_reparos["Colaborador_Oi"] == colaborador]
+        colaborador_reparo = df_reparos[df_reparos["Colaborador"] == colaborador]
         contem = colaborador_reparo[colaborador_reparo["Leonam_2024"] == "Sim"][
             "Leonam_2024"
         ].value_counts()
@@ -112,7 +122,7 @@ def colaborador():
                 st.markdown(
                     f"## :blue[{int(contem.iloc[0]) + int(nao_contem.iloc[0])}]"
                 )
-            col4.write("Base: 15 fev")
+            col4.write("Base: 26 fev")
         else:
             st.info("Selecione um colaborador")
 
@@ -121,21 +131,19 @@ def colaborador():
         base_mes_meta = _base_mes_meta(df_atual, valor_meta, colaborador)
 
         if colaborador != "Selecione":
-            col1, col2, col3, col4 = st.columns(4)
-            df_migracao = df[df["STATUS DETALHADO"] == "MIGRAÇÃO CONCLUÍDA"]
-            meses = list(df_migracao["MÊS CONCLUSÃO"].unique())
-            meses.append("Selecione")
-            mes = col1.selectbox("Mês", meses, index=(len(meses) - 1))
-
+            col1, col_filtro, col3, col4 = st.columns([0.2,0.2,0.4,0.4])
+            mes = col1.selectbox("Mês", ["Selecione", "01/2024", "02/2024"])
+            
             df_mes = df_colaborador[df_colaborador["MÊS CONCLUSÃO"] == mes]
-            col1, col2, col3 = st.columns([1, 0.9, 0.3])
+            col1, col2, col3 = st.columns([0.8, 0.8, 0.3])
             col1.dataframe(base_mes_meta, hide_index=True)
             df_metas_filtro_colaborador = df_metas[
                 df_metas["Colaborador"] == colaborador.title()
             ]
             if mes != "Selecione":
+                farol = col_filtro.selectbox("Farol", ["Selecione", "🟢", "🔴"])
                 tabela_metas_colaborador(
-                    df_mes, df_metas_filtro_colaborador, col2, col3
+                    df_mes, df_metas_filtro_colaborador, col2, farol
                 )
         else:
             st.info("Selecione um colaborador")
@@ -153,11 +161,11 @@ def _contagem_os(df_status):
 
 
 def container_principal(titulos, valores, cores):
-    col1, col2, col3, col4, col5 = st.columns(5, gap="medium")
+    col1, col2, col3, col4, col5, col6 = st.columns(6)
 
     # Loop através das colunass, títulos e valores
     for col, titulo, valor, cor in zip(
-        [col1, col2, col3, col4, col5], titulos, valores, cores
+        [col1, col2, col3, col4, col5, col6], titulos, valores, cores
     ):
         with col.container(border=True):
             st.markdown(f"{titulo.title()}")
@@ -194,14 +202,6 @@ def container_aguard_os_detalhado(coluna, titulos, valores):
                 st.write(f"### :black[{str(valor)}]")
 
 
-def _filtro_uf(df, colunas):
-    filiais = list(df["FILIAL"].unique())
-    filiais.append("Selecione")
-    filial = colunas.selectbox("UF", filiais, index=(len(filiais) - 1), disabled=True)
-    df_filial = df[df["FILIAL"] == filial]
-    return filial, df_filial
-
-
 def _filtro_colaborador(df, colunas):
     colaboradores = list(df["RESPONSÁVEL NOVA OI"].unique())
     colaboradores.append("Selecione")
@@ -223,17 +223,11 @@ def _filtro_metas_total(df_metas, colaborador):
     return df_filtro
 
 
-def _filtro_metas(df_metas, filial):
-    df_filtro = df_metas[df_metas["UF"] == filial]["Meta"]
-    return df_filtro
-
-
 def _base_mes_meta(df_atual, valor_meta, colaborador):
     status = df_atual[df_atual["STATUS DETALHADO"] == "MIGRAÇÃO CONCLUÍDA"]
     base = pd.DataFrame(
         {
-            "Responsável": colaborador,
-            "Mês": status["MÊS CONCLUSÃO"].unique(),
+            "Mês":  status["MÊS CONCLUSÃO"].unique(),
             "Migração Concluída": status["MÊS CONCLUSÃO"].value_counts(),
             "Meta Mensal": valor_meta,
         }

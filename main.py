@@ -4,28 +4,39 @@ from views.base import *
 from views.colaborador import *
 from views.painel import *
 from views.historico import *
-import time 
+
 
 @st.cache_data()
 def carregar_dados(arquivo):
     df_data = pd.read_excel(arquivo, engine="openpyxl", sheet_name="LISTA")
     return df_data
 
+
 if __name__ == "__main__":
-    st.set_page_config("Portal",layout='wide')
+    st.set_page_config("Portal", layout="wide")
     with st.sidebar:
         with st.expander("Base De Migração"):
-            base_de_migracao = st.file_uploader("Anexar Base De Migração", type=['xlsx'], key='unique_key_1')
-            
+            base_de_migracao = st.file_uploader(
+                "Anexar Base De Migração", type=["xlsx"], key="unique_key_1"
+            )
+
     with st.sidebar:
         with st.expander("Base Controle De Reparo"):
-            controle_de_reparo = st.file_uploader("Anexar Base De Migração", type=['xlsx'], key='unique_key_2', disabled=True)
-    
+            controle_de_reparo = st.file_uploader(
+                "Anexar Base Controle De Reparo",
+                type=["xlsx"],
+                key="unique_key_2",
+                disabled=True,
+            )
+
     if base_de_migracao is not None:
+
         df = carregar_dados(base_de_migracao)
+
         iniciar_dados(df)
+
         with st.expander("Menu", expanded=True):
-            col1,col2, col3, col4 = st.columns(4, gap='medium')
+            col1, col2, col3, col4 = st.columns(4, gap="medium")
             col1.button(
                 "Painel De Migração",
                 use_container_width=True,

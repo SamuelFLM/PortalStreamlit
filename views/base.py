@@ -6,20 +6,14 @@ def base_migracao():
     df = st.session_state["dados_excel"]
     
     
+    st.markdown("## Base :green[De Migração]") 
     col1 ,col2 = st.columns([0.3,0.3])
     
     colaborador, df_colaborador  = _filtro_tabela(df,"RESPONSÁVEL NOVA OI", col1, "Colaborador")
     status, df_status = _filtro_tabela(df_colaborador,"STATUS DETALHADO", col2, "Status Detalhado")   
     
-    # col4.button("Adicionar", use_container_width=True, type='primary')
-    # col5.button("Editar", use_container_width=True, type='primary' )
-    # col6.button("Excluir", use_container_width=True, type='primary')
-    
-     
-     
-    st.header("", divider='green')
-    
-    
+    st.divider() 
+
     tabela_atual = df
     if colaborador != "Selecione":
         tabela_atual = df_colaborador

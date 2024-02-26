@@ -8,22 +8,24 @@ def historico():
     df_metas = st.session_state["dados_metas"]
     # df_2023 = st.session_state["dados_2023"]
 
-    st.header("Histórico De Migração")
-    col1, col2, col3 = st.columns([0.2, 0.2, 0.9])
+    st.markdown("## Historíco :green[De Migração]")
+    col1, col_mes, col_filtro, col4 = st.columns([0.2, 0.2, 0.2, 0.9])
     ano = col1.selectbox("Ano", ["2024", "2023"])
 
-    st.header("", divider="green")
-
-    aplicar_espaco_entre_componentes()
+    st.divider()
 
     if ano == "2024":
-        _tabela_2024(df, df_metas)
+        _tabela_2024(df, df_metas, col_mes, col_filtro)
     else:
-        with st.spinner("Carregando..."):
-            _tabela_2023()
+        with st.expander("Arquivo"):
+            base_2023 = st.file_uploader("Anexar Base De Migração - 2023", type=['xlsx'])
+    
+        if base_2023 is not None:
+            df = pd.read_excel(base_2023, engine="openpyxl", sheet_name="LISTA")
+            _tabela_2023(df)
 
 
-def _tabela_2024(df, df_metas):
+def _tabela_2024(df, df_metas, coluna, col_farol):
 
     # Filtragem dos dados onde o status detalhado é "MIGRAÇÃO CONCLUÍDA"
     df_filtro_migracao = df[df["STATUS DETALHADO"] == "MIGRAÇÃO CONCLUÍDA"]
@@ -49,19 +51,21 @@ def _tabela_2024(df, df_metas):
     )
 
     # filtro
-    coluna_filtro_mes, coluna_filtro_farol, col3, col4 = st.columns([0.3, 0.3, 0.3, 1])
 
-    df_mes, mes = _filtro(coluna_filtro_mes, df_historico, "Mês", "Mês")
+    df_mes, mes = _filtro(coluna, df_historico, "Mês", "Mês")
+
 
     col1, col2, col3 = st.columns([0.8,0.9,0.3])
 
     col1.dataframe(df_historico, width=400, hide_index=True)
+    
     if mes != "Selecione":
-        tabela_metas_historico(df, df_metas, mes, col2, col3)
+        farol = col_farol.selectbox("Farol", ["Selecione", "🟢", "🔴"])
+        tabela_metas_historico(df, df_metas, mes, col2, farol)
        
 
 
-def _tabela_2023():
+def _tabela_2023(df):
     meses = {
         1: "Janeiro",
         2: "Fevereiro",
@@ -77,8 +81,6 @@ def _tabela_2023():
         12: "Dezembro",
     }
     
-    excel = "Controle Migração Cobre Para Fibra fechamento 2023.xlsx"
-    df = pd.read_excel(PASTA_EXCEL / excel, engine="openpyxl", sheet_name="LISTA")
     df["MÊS"] = pd.to_datetime(df["MÊS"])
     df["MÊS"] = df["MÊS"].dt.month.map(meses)
 

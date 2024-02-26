@@ -15,7 +15,6 @@ def painel():
         "FRENTE DE TRABALHO: ".title(), clientes, index=(len(clientes) - 1)
     )
 
-    st.header("", divider="green")
 
     if cliente == "Selecione":
         df_atual = df
@@ -55,17 +54,6 @@ def painel():
         )
     except:
         pass
-
-
-def _card(col1, titulo, total):
-
-    col1.markdown(
-        f"{titulo}",
-    )
-    col1.markdown(
-        f"<h4 style='text-align: center;'>Total: {total}</h4>", unsafe_allow_html=True
-    )
-    col1.divider()
 
 
 def _card_grafico(col1, titulo, plt):

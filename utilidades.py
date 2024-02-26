@@ -4,14 +4,14 @@ from pathlib import Path
 from time import sleep
 
 PASTA_ATUAL = Path(__file__).parent
-PASTA_EXCEL = PASTA_ATUAL / "a" / "test"
-PASTA_IMAGEM = PASTA_ATUAL / "img"
+PASTA_EXCEL = PASTA_ATUAL / "database"
 
 
 @st.cache_data
-def carregar_dados_2023():
-    excel = "Controle Migração Cobre Para Fibra fechamento 2023.xlsx"
-    df_data = pd.read_excel(PASTA_EXCEL / excel, engine="openpyxl", sheet_name="LISTA")
+def carregar_dados_reparo():
+    df_data = pd.read_excel(
+        PASTA_EXCEL / "Base_Rep_CB.xlsx", engine="openpyxl", sheet_name="Resultado"
+    )
     return df_data
 
 
@@ -22,30 +22,20 @@ def carregar_dados_meta():
     return df_data
 
 
-@st.cache_data
-def carregar_dados_reparo():
-    excel = "reparo.xlsx"
-    df_data = pd.read_excel(
-        PASTA_EXCEL / excel, engine="openpyxl", sheet_name="Planilha1"
-    )
-    return df_data
-
-
 def iniciar_dados(df):
-    df_metas = carregar_dados_meta()
-    df_reparos = carregar_dados_reparo()
-
+    
     if not "dados_excel" in st.session_state:
         st.session_state["dados_excel"] = df
 
-    if not "dados_metas" in st.session_state:
-        st.session_state["dados_metas"] = df_metas
-
     if not "dados_reparos" in st.session_state:
-        st.session_state["dados_reparos"] = df_reparos
+        st.session_state["dados_reparos"] = carregar_dados_reparo()
+
+    if not "dados_metas" in st.session_state:
+        st.session_state["dados_metas"] = carregar_dados_meta()
 
     if not "pagina_central" in st.session_state:
         st.session_state["pagina_central"] = "pag_home"
+
 
 def mudar_pagina(pagina):
     st.session_state["pagina_central"] = pagina
@@ -56,26 +46,7 @@ def carregar_elemento():
         sleep(0.3)
 
 
-def configuracao_pagina():
-    st.set_page_config(
-        "Portal - Operações De Terceiros",layout="wide"
-    )
-
-
-def aplicar_espaco_entre_componentes():
-    st.markdown(
-        """
-    <style>
-    [data-testid=column]:nth-of-type(1) [data-testid=stVerticalBlock] {
-    gap: 0rem;
-    }
-    </style>
-    """,
-        unsafe_allow_html=True,
-    )
-
-
-def tabela_metas_historico(df, df_metas, mes, col_tabela, col_filtro):
+def tabela_metas_historico(df, df_metas, mes, col_tabela, farol):
     df_filtro = df[df["MÊS CONCLUSÃO"] == mes]
 
     # Cria um DataFrame com todas as filiais e inicializa o resultado com 0
@@ -108,7 +79,7 @@ def tabela_metas_historico(df, df_metas, mes, col_tabela, col_filtro):
     ) + "%"
     df_uf["Colaborador"] = df_metas["Colaborador"]
 
-    farol = col_filtro.selectbox("Farol", ["Selecione", "🟢", "🔴"])
+    
     df_farol_filted = df_uf[df_uf["Farol"] == farol]
 
     if farol != "Selecione":
@@ -120,7 +91,7 @@ def tabela_metas_historico(df, df_metas, mes, col_tabela, col_filtro):
         col_tabela.table(df_farol_atual)
 
 
-def tabela_metas_colaborador(df_mes, df_metas, col_tabela, col_filtro):
+def tabela_metas_colaborador(df_mes, df_metas, col_tabela, farol):
 
     # Cria um DataFrame com todas as filiais e inicializa o resultado com 0
     df_uf = pd.DataFrame(
@@ -151,7 +122,7 @@ def tabela_metas_colaborador(df_mes, df_metas, col_tabela, col_filtro):
         str
     ) + "%"
 
-    farol = col_filtro.selectbox("Farol", ["Selecione", "🟢", "🔴"])
+    
     df_farol_filted = df_uf[df_uf["Farol"] == farol]
 
     if farol != "Selecione":
