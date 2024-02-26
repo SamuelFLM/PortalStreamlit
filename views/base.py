@@ -5,9 +5,8 @@ from utilidades import *
 def base_migracao():
     df = st.session_state["dados_excel"]
     
-    aplicar_espaco_entre_componentes()
     
-    col1 ,col2,  col3, col4, col5, col6 = st.columns([0.4,0.4,0.4,0.2,0.2,0.2], gap='medium')
+    col1 ,col2 = st.columns([0.3,0.3])
     
     colaborador, df_colaborador  = _filtro_tabela(df,"RESPONSÁVEL NOVA OI", col1, "Colaborador")
     status, df_status = _filtro_tabela(df_colaborador,"STATUS DETALHADO", col2, "Status Detalhado")   

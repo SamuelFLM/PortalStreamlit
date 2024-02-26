@@ -1,6 +1,5 @@
 import streamlit as st
 from utilidades import *
-from colorama import Fore
 
 colunas = [
     "Em execução",
@@ -20,9 +19,7 @@ def colaborador():
     df_metas = st.session_state["dados_metas"]
     df_reparos = st.session_state["dados_reparos"]
 
-    selectbox_colaborador, selectbox_uf, selectbox_data, col4 = st.columns(
-        [0.3, 0.3, 0.3, 0.8]
-    )
+    selectbox_colaborador, selectbox_data, col3 = st.columns([0.3,0.3,0.5])
     colaborador, df_colaborador = _filtro_colaborador(df, selectbox_colaborador)
 
     if colaborador == "Selecione":
@@ -48,7 +45,13 @@ def colaborador():
         valor_meta = int(uf_metas.iloc[0])
 
     container_principal(
-        ["Total", "Em execução", "Total Migração concluída", "Meta Até Mês Recorrente", "Meta Mês Corrente"],
+        [
+            "Total",
+            "Em execução",
+            "Total Migração concluída",
+            "Meta Até Mês Recorrente",
+            "Meta Mês Corrente",
+        ],
         [
             total_filtro_status,
             len(status_em_execução),
@@ -125,8 +128,8 @@ def colaborador():
             mes = col1.selectbox("Mês", meses, index=(len(meses) - 1))
 
             df_mes = df_colaborador[df_colaborador["MÊS CONCLUSÃO"] == mes]
-            col1, col2, col3 = st.columns([1,0.9,0.3])
-            col1.table(base_mes_meta)
+            col1, col2, col3 = st.columns([1, 0.9, 0.3])
+            col1.dataframe(base_mes_meta, hide_index=True)
             df_metas_filtro_colaborador = df_metas[
                 df_metas["Colaborador"] == colaborador.title()
             ]
@@ -150,7 +153,7 @@ def _contagem_os(df_status):
 
 
 def container_principal(titulos, valores, cores):
-    col1, col2, col3, col4, col5 = st.columns(5, gap='medium')
+    col1, col2, col3, col4, col5 = st.columns(5, gap="medium")
 
     # Loop através das colunass, títulos e valores
     for col, titulo, valor, cor in zip(
@@ -231,6 +234,7 @@ def _base_mes_meta(df_atual, valor_meta, colaborador):
         {
             # "Mês": status["MÊS CONCLUSÃO"].unique(),
             "Responsável": colaborador,
+            "Mês": ["Jan", "Fev"],
             "Migração Concluída": status["MÊS CONCLUSÃO"].value_counts(),
             "Meta Mensal": valor_meta,
         }
@@ -243,8 +247,3 @@ def _base_mes_meta(df_atual, valor_meta, colaborador):
         2
     ).astype(str) + " % "
     return base
-
-
-def _base_uf_meta():
-
-    pass
