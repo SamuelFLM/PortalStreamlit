@@ -42,14 +42,14 @@ def painel():
         if contagem_operacao.empty:
             contagem_operacao_atual = 0
         else:
-            contagem_operacao_atual = str(contagem_operacao.iloc[0])
+            contagem_operacao_atual = int(contagem_operacao.iloc[0])
         container_aguard_os_detalhado(
             st,
             ["Aguard. Abert. OS - UN", "Aguard. Abert. OS - OPERAÇÃO", "MIGRAÇÃO CONCLUÍDA"],
             [
-                str(contagem_un.iloc[0]),
+                int(contagem_un.iloc[0]),
                 contagem_operacao_atual,
-                contagem_migracao_concluida.iloc[0]
+                int(contagem_migracao_concluida.iloc[0])
                 
             ],
         )

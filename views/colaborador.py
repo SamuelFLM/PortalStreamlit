@@ -232,9 +232,8 @@ def _base_mes_meta(df_atual, valor_meta, colaborador):
     status = df_atual[df_atual["STATUS DETALHADO"] == "MIGRAÇÃO CONCLUÍDA"]
     base = pd.DataFrame(
         {
-            # "Mês": status["MÊS CONCLUSÃO"].unique(),
             "Responsável": colaborador,
-            "Mês": ["Jan", "Fev"],
+            "Mês": status["MÊS CONCLUSÃO"].unique(),
             "Migração Concluída": status["MÊS CONCLUSÃO"].value_counts(),
             "Meta Mensal": valor_meta,
         }
