@@ -21,10 +21,10 @@ def colaborador():
 
     col_colaborador, col_data, col3 = st.columns([0.3, 0.3, 1])
     colaborador, df_colaborador = _filtro_colaborador(df, col_colaborador)
-    data_conclusao = col_data.selectbox("Migração concluída Mês", ["Selecione","01/2024", "02/2024"])
-    
-    
-    
+    data_conclusao = col_data.selectbox(
+        "Migração concluída Mês", ["Selecione", "01/2024", "02/2024"]
+    )
+
     if colaborador == "Selecione":
         df_atual = df
     else:
@@ -36,14 +36,15 @@ def colaborador():
     status_em_execução = _filtro_status(df_atual, colunas[0].upper())
     status_migracao_concluida = _filtro_status(df_atual, colunas[1].upper())
     df_status = df_atual[(df_atual["STATUS DETALHADO"] == "AGUARDANDO ABERTURA OS")]
-    
+
     if data_conclusao == "Selecione":
         valor_migracao_mes = 0
     else:
-        valor = status_migracao_concluida[status_migracao_concluida["MÊS CONCLUSÃO"] == data_conclusao]
+        valor = status_migracao_concluida[
+            status_migracao_concluida["MÊS CONCLUSÃO"] == data_conclusao
+        ]
         valor_migracao_mes = valor["MÊS CONCLUSÃO"].value_counts().iloc[0]
-        
-    
+
     if uf_metas.empty:
         if colaborador == "Selecione":
             valor_meta = 1000
@@ -67,7 +68,7 @@ def colaborador():
             2000,
             len(status_migracao_concluida),
             valor_meta,
-            valor_migracao_mes
+            valor_migracao_mes,
         ],
         ["orange", "red", "blue", "green", "blue", "green"],
     )
@@ -99,41 +100,48 @@ def colaborador():
             pass
 
     with controle_de_reparo:
+        with st.expander("Base Controle De Reparo"):
+            controle_de_reparo = st.file_uploader(
+                "Anexar Base Controle De Reparo",
+                type=["xlsx"],
+                key="unique_key_2",
+            )
 
-        col1, col2, col3, col4 = st.columns(4)
-        colaborador_reparo = df_reparos[df_reparos["Colaborador"] == colaborador]
-        contem = colaborador_reparo[colaborador_reparo["Leonam_2024"] == "Sim"][
-            "Leonam_2024"
-        ].value_counts()
-        nao_contem = colaborador_reparo[colaborador_reparo["Leonam_2024"] == "Não"][
-            "Leonam_2024"
-        ].value_counts()
-        if colaborador != "Selecione":
-            with col1.container(border=True):
-                st.markdown("Não Contem na base de migração")
-                st.markdown(f"## :red[{nao_contem.iloc[0]}]")
+        if controle_de_reparo is not None:
+            df = pd.read_excel(
+                controle_de_reparo, engine="openpyxl", sheet_name="Resultado"
+            )
+            col1, col2, col3, col4 = st.columns(4)
 
-            with col2.container(border=True):
-                st.markdown("Contem na base de migração")
-                st.markdown(f"## :green[{contem.iloc[0]}]")
+            if colaborador == "Selecione":
+                contem = df_reparos[df_reparos["Leonam_2024"] == "Sim"][
+                    "Leonam_2024"
+                ].value_counts()
+                nao_contem = df_reparos[df_reparos["Leonam_2024"] == "Não"][
+                    "Leonam_2024"
+                ].value_counts()
+                _controle_de_reparo(col1,col2,col3,col4,nao_contem,contem,"26 fev")
+            else:
+                df_atual_reparos = df_reparos[df_reparos["Colaborador"] == colaborador]
 
-            with col3.container(border=True):
-                st.markdown("Total")
-                st.markdown(
-                    f"## :blue[{int(contem.iloc[0]) + int(nao_contem.iloc[0])}]"
-                )
-            col4.write("Base: 26 fev")
-        else:
-            st.info("Selecione um colaborador")
+                contem = df_atual_reparos[df_atual_reparos["Leonam_2024"] == "Sim"][
+                    "Leonam_2024"
+                ].value_counts()
+                nao_contem = df_atual_reparos[df_atual_reparos["Leonam_2024"] == "Não"][
+                    "Leonam_2024"
+                ].value_counts()
+                _controle_de_reparo(col1,col2,col3,col4,nao_contem,contem,"26 fev")
+                
+                
 
     with tabela_filtrada:
 
         base_mes_meta = _base_mes_meta(df_atual, valor_meta, colaborador)
 
         if colaborador != "Selecione":
-            col1, col_filtro, col3, col4 = st.columns([0.2,0.2,0.4,0.4])
+            col1, col_filtro, col3, col4 = st.columns([0.2, 0.2, 0.4, 0.4])
             mes = col1.selectbox("Mês", ["Selecione", "01/2024", "02/2024"])
-            
+
             df_mes = df_colaborador[df_colaborador["MÊS CONCLUSÃO"] == mes]
             col1, col2, col3 = st.columns([0.8, 0.8, 0.3])
             col1.dataframe(base_mes_meta, hide_index=True)
@@ -147,6 +155,23 @@ def colaborador():
                 )
         else:
             st.info("Selecione um colaborador")
+
+
+def _controle_de_reparo(col1, col2,col3,col4, nao_contem, contem, data):
+    with col1.container(border=True):
+                    st.markdown("Não Contem na base de migração")
+                    st.markdown(f"## :red[{nao_contem.iloc[0]}]")
+
+    with col2.container(border=True):
+                    st.markdown("Contem na base de migração")
+                    st.markdown(f"## :green[{contem.iloc[0]}]")
+
+    with col3.container(border=True):
+                    st.markdown("Total")
+                    st.markdown(
+                        f"## :blue[{int(contem.iloc[0]) + int(nao_contem.iloc[0])}]"
+                    )
+    col4.write(f"Base: {data}")
 
 
 def _contagem_os(df_status):
@@ -227,7 +252,7 @@ def _base_mes_meta(df_atual, valor_meta, colaborador):
     status = df_atual[df_atual["STATUS DETALHADO"] == "MIGRAÇÃO CONCLUÍDA"]
     base = pd.DataFrame(
         {
-            "Mês":  status["MÊS CONCLUSÃO"].unique(),
+            "Mês": status["MÊS CONCLUSÃO"].unique(),
             "Migração Concluída": status["MÊS CONCLUSÃO"].value_counts(),
             "Meta Mensal": valor_meta,
         }

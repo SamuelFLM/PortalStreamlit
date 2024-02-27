@@ -20,14 +20,7 @@ if __name__ == "__main__":
                 "Anexar Base De Migração", type=["xlsx"], key="unique_key_1"
             )
 
-    with st.sidebar:
-        with st.expander("Base Controle De Reparo"):
-            controle_de_reparo = st.file_uploader(
-                "Anexar Base Controle De Reparo",
-                type=["xlsx"],
-                key="unique_key_2",
-                disabled=True,
-            )
+   
 
     if base_de_migracao is not None:
 
