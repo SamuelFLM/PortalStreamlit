@@ -17,7 +17,6 @@ colunas = [
 def colaborador():
     df = st.session_state["dados_excel"]
     df_metas = st.session_state["dados_metas"]
-    df_reparos = st.session_state["dados_reparos"]
 
     col_colaborador, col_data, col3 = st.columns([0.3, 0.3, 1])
     colaborador, df_colaborador = _filtro_colaborador(df, col_colaborador)
@@ -108,7 +107,7 @@ def colaborador():
             )
 
         if controle_de_reparo is not None:
-            df = pd.read_excel(
+            df_reparos = pd.read_excel(
                 controle_de_reparo, engine="openpyxl", sheet_name="Resultado"
             )
             col1, col2, col3, col4 = st.columns(4)

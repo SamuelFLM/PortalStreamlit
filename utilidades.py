@@ -8,14 +8,6 @@ PASTA_EXCEL = PASTA_ATUAL / "database"
 
 
 @st.cache_data
-def carregar_dados_reparo():
-    df_data = pd.read_excel(
-        PASTA_EXCEL / "Base_Rep_CB.xlsx", engine="openpyxl", sheet_name="Resultado"
-    )
-    return df_data
-
-
-@st.cache_data
 def carregar_dados_meta():
     excel = "meta.xlsx"
     df_data = pd.read_excel(PASTA_EXCEL / excel, engine="openpyxl", sheet_name="METAS")
@@ -26,9 +18,6 @@ def iniciar_dados(df):
     
     if not "dados_excel" in st.session_state:
         st.session_state["dados_excel"] = df
-
-    if not "dados_reparos" in st.session_state:
-        st.session_state["dados_reparos"] = carregar_dados_reparo()
 
     if not "dados_metas" in st.session_state:
         st.session_state["dados_metas"] = carregar_dados_meta()
