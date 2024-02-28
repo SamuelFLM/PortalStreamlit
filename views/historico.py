@@ -16,7 +16,8 @@ def historico():
 
     if ano == "2024":
         df_filtro_migracao = df[df["STATUS DETALHADO"] == "MIGRAÇÃO CONCLUÍDA"]
-        st.markdown(f"Resultado Total: {df_filtro_migracao.groupby("STATUS DETALHADO").count()["STATUS"].iloc[0]}")
+        resultado_total = df_filtro_migracao.groupby("STATUS DETALHADO").count()["STATUS"].iloc[0]
+        st.markdown("Resultado Total: {}".format(resultado_total))
         
         _tabela_2024(df, df_metas, col_mes, col_filtro)
     else:
