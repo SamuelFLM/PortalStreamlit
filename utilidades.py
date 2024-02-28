@@ -111,7 +111,8 @@ def tabela_metas_historico(df, df_metas, mes, col_tabela, farol, col_download):
     btn = col_download.download_button(
         label="Download Image",
         data=byte_im,
-        file_name=f"{mes}_{farol}_{data.strftime("%d/%m %H:%M:%S")}.jpeg",
+        # file_name="{mes}_{farol}_{data.strftime("%d/%m %H:%M:%S")}.jpeg",
+        file_name="tabela.jpeg",
         mime="image/jpeg",
     )
     
