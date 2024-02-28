@@ -84,6 +84,7 @@ def tabela_metas_historico(df, df_metas, mes, col_tabela, farol, col_download):
     df_replace = df_farol_atual
     df_replace = df_replace.replace("🔴", "Vermelho - Abaixo")
     df_replace = df_replace.replace("🟢", "Verde - Acima")
+    
     fig, ax =plt.subplots(figsize=(16,10)) # Você pode ajustar o tamanho conforme necessário
     ax.axis('tight')
     ax.axis('off')
@@ -112,7 +113,6 @@ def tabela_metas_historico(df, df_metas, mes, col_tabela, farol, col_download):
         label="Download Image",
         data=byte_im,
         file_name = "{}_{}_{}.jpeg".format(mes, farol, data.strftime("%d/%m %H:%M:%S")),
-        # file_name="tabela.jpeg",
         mime="image/jpeg",
     )
     
