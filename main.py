@@ -20,8 +20,6 @@ if __name__ == "__main__":
                 "Anexar Base De Migração", type=["xlsx"], key="unique_key_1"
             )
 
-   
-
     if base_de_migracao is not None:
 
         df = carregar_dados(base_de_migracao)

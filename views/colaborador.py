@@ -135,7 +135,7 @@ def colaborador():
 
     with tabela_filtrada:
 
-        base_mes_meta = _base_mes_meta(df_atual, valor_meta, colaborador)
+        base_mes_meta = _base_mes_meta(df_atual, valor_meta)
 
         if colaborador != "Selecione":
             col1, col_filtro, col3, col4 = st.columns([0.2, 0.2, 0.4, 0.4])
@@ -143,7 +143,8 @@ def colaborador():
 
             df_mes = df_colaborador[df_colaborador["MÊS CONCLUSÃO"] == mes]
             col1, col2, col3 = st.columns([0.8, 0.8, 0.3])
-            col1.dataframe(base_mes_meta, hide_index=True)
+            
+            col1.dataframe(base_mes_meta, hide_index=True,)
             df_metas_filtro_colaborador = df_metas[
                 df_metas["Colaborador"] == colaborador.title()
             ]
@@ -222,7 +223,7 @@ def container_aguard_os_detalhado(coluna, titulos, valores):
         for col, titulo, valor in zip([col1, col2], titulos, valores):
             with col.container(border=True):
                 st.markdown("Aguardando Abertura OS")
-                st.markdown(f"{titulo.title()}")
+                st.markdown(f"{titulo}")
                 st.write(f"### :black[{str(valor)}]")
 
 
@@ -247,7 +248,7 @@ def _filtro_metas_total(df_metas, colaborador):
     return df_filtro
 
 
-def _base_mes_meta(df_atual, valor_meta, colaborador):
+def _base_mes_meta(df_atual, valor_meta):
     status = df_atual[df_atual["STATUS DETALHADO"] == "MIGRAÇÃO CONCLUÍDA"]
     base = pd.DataFrame(
         {
@@ -263,4 +264,5 @@ def _base_mes_meta(df_atual, valor_meta, colaborador):
     base["Porcentagem"] = ((base["Migração Concluída"] / valor_meta) * 100).round(
         2
     ).astype(str) + " % "
+    base = base.sort_values("Mês")
     return base

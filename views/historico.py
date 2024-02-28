@@ -15,6 +15,9 @@ def historico():
     st.divider()
 
     if ano == "2024":
+        df_filtro_migracao = df[df["STATUS DETALHADO"] == "MIGRAÇÃO CONCLUÍDA"]
+        st.markdown(f"Resultado Total: {df_filtro_migracao.groupby("STATUS DETALHADO").count()["STATUS"].iloc[0]}")
+        
         _tabela_2024(df, df_metas, col_mes, col_filtro)
     else:
         with st.expander("Arquivo"):
@@ -46,22 +49,20 @@ def _tabela_2024(df, df_metas, coluna, col_farol):
     df_historico["Porcentagem"] = ((df_historico["Resultado"] / 1000) * 100).round(
         2
     ).astype(str) + "%"
-    df_historico["Total"] = (
-        df_filtro_migracao.groupby("STATUS DETALHADO").count()["STATUS"].iloc[0]
-    )
+   
 
     # filtro
 
     df_mes, mes = _filtro(coluna, df_historico, "Mês", "Mês")
 
 
-    col1, col2, col3 = st.columns([0.8,0.9,0.3])
-
+    col1, col2, col3, col4 = st.columns([0.8,0.9,0.3,0.3])
     col1.dataframe(df_historico, width=400, hide_index=True)
     
     if mes != "Selecione":
         farol = col_farol.selectbox("Farol", ["Selecione", "🟢", "🔴"])
-        tabela_metas_historico(df, df_metas, mes, col2, farol)
+        
+        tabela_metas_historico(df, df_metas, mes, col2, farol, col3)
        
 
 

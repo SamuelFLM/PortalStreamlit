@@ -31,12 +31,3 @@ def _filtro_tabela(df,coluna_excel,posicao_tela, titulo_selectbox):
     valor = posicao_tela.selectbox(titulo_selectbox, valores_unicos, placeholder="Selecione",index=ultimo_index)
     df_filtrado = df[df[coluna_excel] == valor]
     return valor, df_filtrado
-
-
-# with st.form("my_form"):
-#     st.write("Inside the form")
-#     slider_val = st.slider("Form slider")
-#     checkbox_val = st.checkbox("Form checkbox")
-#     submitted = st.form_submit_button("Submit")
-#     if submitted:
-#         st.write("slider", slider_val, "checkbox", checkbox_val)
