@@ -57,7 +57,7 @@ def _tabela_2024(df, df_metas, coluna, col_farol):
     df_mes, mes = _filtro(coluna, df_historico, "Mês", "Mês")
 
 
-    col1, col2, col3, col4 = st.columns([0.8,0.9,0.3,0.3])
+    col1, col2, col3, col4 = st.columns([0.8,0.9,0.9,0.3])
     col1.dataframe(df_historico, width=400, hide_index=True)
     
     if mes != "Selecione":

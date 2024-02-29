@@ -3,8 +3,11 @@ import pandas as pd
 from pathlib import Path
 from time import sleep
 import matplotlib.pyplot as plt
-from io import BytesIO
-from PIL import Image
+import pdfkit
+
+# from matplotlib.backends.backend_pdf import PdfPages
+# from io import BytesIO
+# from PIL import Image
 from datetime import datetime
 
 PASTA_ATUAL = Path(__file__).parent
@@ -19,7 +22,7 @@ def carregar_dados_meta():
 
 
 def iniciar_dados(df):
-    
+
     if not "dados_excel" in st.session_state:
         st.session_state["dados_excel"] = df
 
@@ -39,7 +42,7 @@ def carregar_elemento():
         sleep(0.3)
 
 
-def tabela_metas_historico(df, df_metas, mes, col_tabela, farol, col_download):
+def tabela_metas_historico(df, df_metas, mes, col_tabela, farol, col_tabela2):
     df_filtro = df[df["MÊS CONCLUSÃO"] == mes]
 
     # Cria um DataFrame com todas as filiais e inicializa o resultado com 0
@@ -71,51 +74,28 @@ def tabela_metas_historico(df, df_metas, mes, col_tabela, farol, col_download):
         str
     ) + "%"
 
-    
     df_farol_filted = df_uf[df_uf["Farol"] == farol]
 
     if farol != "Selecione":
         df_farol_atual = df_farol_filted
-        col_tabela.dataframe(df_farol_atual,hide_index=True)
+        # Converte o DataFrame para HTML e adiciona a formatação em negrito
+        # df_html = df_farol_atual.to_html().replace(
+        #     "<th>", '<th style="font-weight: bold;">'
+        # )
+        # # Exibe a tabela HTML com st.markdown()
+        # col_tabela.markdown(df_html, unsafe_allow_html=True)
+        col_tabela.table(df_farol_atual)
     else:
         df_farol_atual = df_uf
-        col_tabela.dataframe(df_farol_atual,height=946, hide_index=True)
+        col_tabela.dataframe(df_farol_atual.iloc[:13], height=493, hide_index=True)
+        col_tabela2.dataframe(df_farol_atual.iloc[14:], height=458, hide_index=True)
 
-    df_replace = df_farol_atual
-    df_replace = df_replace.replace("🔴", "Vermelho - Abaixo")
-    df_replace = df_replace.replace("🟢", "Verde - Acima")
-    
-    fig, ax =plt.subplots(figsize=(16,10)) # Você pode ajustar o tamanho conforme necessário
-    ax.axis('tight')
-    ax.axis('off')
-    ax.table(cellText=df_replace.values,
-            colLabels=df_replace.columns,
-            rowLabels=df_replace.index,
-            cellLoc = 'center', 
-            loc='center')
+    # # Converte o DataFrame para HTML
+    # df_html = df_farol_atual.to_html()
 
-    # Salve a figura em um objeto BytesIO
-    buf = BytesIO()
-    plt.savefig(buf, format="png")
-    buf.seek(0)
+    # # Converte o HTML para PDF
+    # pdfkit.from_string(df_html, "dataframe.pdf")
 
-    # Crie um objeto Image a partir do buffer
-    img = Image.open(buf)
-    
-    img_rgb = img.convert('RGB')
-    # Converta a imagem em bytes
-    buf = BytesIO()
-    img_rgb.save(buf, format="JPEG")
-    byte_im = buf.getvalue()
-    data = datetime.now()
-    # Agora você pode usar o st.download_button
-    btn = col_download.download_button(
-        label="Download Image",
-        data=byte_im,
-        file_name = "{}_{}_{}.jpeg".format(mes, farol, data.strftime("%d/%m %H:%M:%S")),
-        mime="image/jpeg",
-    )
-    
 
 def tabela_metas_colaborador(df_mes, df_metas, col_tabela, farol):
 
@@ -148,12 +128,11 @@ def tabela_metas_colaborador(df_mes, df_metas, col_tabela, farol):
         str
     ) + "%"
 
-    
     df_farol_filted = df_uf[df_uf["Farol"] == farol]
 
     if farol != "Selecione":
         df_farol_atual = df_farol_filted
     else:
         df_farol_atual = df_uf
-    
+
     col_tabela.dataframe(df_farol_atual, hide_index=True)
