@@ -3,11 +3,12 @@ import pandas as pd
 from pathlib import Path
 from time import sleep
 import matplotlib.pyplot as plt
-import pdfkit
+# import pdfkit
 
 # from matplotlib.backends.backend_pdf import PdfPages
 # from io import BytesIO
 # from PIL import Image
+
 from datetime import datetime
 
 PASTA_ATUAL = Path(__file__).parent
