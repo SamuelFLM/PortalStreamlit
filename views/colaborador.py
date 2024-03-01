@@ -14,8 +14,7 @@ colunas = [
 ]
 
 
-def colaborador():
-    df = st.session_state["dados_excel"]
+def colaborador(df):
     df_metas = st.session_state["dados_metas"]
 
     col_colaborador, col_data, col3 = st.columns([0.3, 0.3, 1])
@@ -266,3 +265,4 @@ def _base_mes_meta(df_atual, valor_meta):
     ).astype(str) + " % "
     base = base.sort_values("Mês")
     return base
+

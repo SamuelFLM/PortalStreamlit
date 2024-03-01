@@ -3,8 +3,8 @@ from utilidades import *
 import numpy as np
 
 
-def historico():
-    df = st.session_state["dados_excel"]
+def historico(df):
+    # df = st.session_state["dados_excel"]
     df_metas = st.session_state["dados_metas"]
     # df_2023 = st.session_state["dados_2023"]
 
