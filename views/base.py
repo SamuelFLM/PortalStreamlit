@@ -19,12 +19,10 @@ def base_migracao():
             df_colaborador, "STATUS DETALHADO", col2, "Status Detalhado"
         )
 
-        if colaborador != "Selecione":
-            tabela_atual = df_colaborador
-        if status != "Selecione":
-            tabela_atual = df_status
-        else:
-            tabela_atual = df
+    if colaborador != "Selecione":
+        tabela_atual = df_colaborador
+    if status != "Selecione":
+        tabela_atual = df_status
 
     with filtro2.expander("Pesquisar"):
         st.markdown("Buscar por Circuito (LOTE)")

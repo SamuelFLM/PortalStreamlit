@@ -132,8 +132,6 @@ def colaborador():
                 ].value_counts()
                 _controle_de_reparo(col1,col2,col3,col4,nao_contem,contem,"26 fev")
                 
-                
-
     with tabela_filtrada:
 
         base_mes_meta = _base_mes_meta(df_atual, valor_meta)
