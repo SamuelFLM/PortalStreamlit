@@ -9,12 +9,16 @@ def painel():
 
     st.markdown("## Painel :green[De Migração]")
 
-    clientes = list(df["FRENTE DE TRABALHO"].unique())
-    clientes.append("Selecione")
-    col1, col2, col3 = st.columns([0.25, 0.6, 0.4])
-    cliente = col1.selectbox(
-        "FRENTE DE TRABALHO: ".title(), clientes, index=(len(clientes) - 1)
-    )
+    tab_base(df)
+
+def tab_base(df):
+    with st.expander("Filtro"):
+        clientes = list(df["FRENTE DE TRABALHO"].unique())
+        clientes.append("Selecione")
+        col1, col2, col3 = st.columns([0.25, 0.6, 0.4])
+        cliente = col1.selectbox(
+            "FRENTE DE TRABALHO: ".title(), clientes, index=(len(clientes) - 1)
+        )
 
     if cliente == "Selecione":
         df_atual = df
@@ -57,8 +61,7 @@ def painel():
         )
     except:
         pass
-
-
+    
 def _contagem_os(df_atual):
     df_status = df_atual[(df_atual["STATUS DETALHADO"] == "AGUARDANDO ABERTURA OS")]
     contagem_area_responsavel_un = df_status["ÁREA RESPONSÁVEL"][

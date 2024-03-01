@@ -18,11 +18,12 @@ def colaborador():
     df = st.session_state["dados_excel"]
     df_metas = st.session_state["dados_metas"]
 
-    col_colaborador, col_data, col3 = st.columns([0.3, 0.3, 1])
-    colaborador, df_colaborador = _filtro_colaborador(df, col_colaborador)
-    data_conclusao = col_data.selectbox(
-        "Migração concluída Mês", ["Selecione", "01/2024", "02/2024"]
-    )
+    with st.expander("Filtro"):
+        col_colaborador, col_data, col3 = st.columns([0.3, 0.3, 1])
+        colaborador, df_colaborador = _filtro_colaborador(df, col_colaborador)
+        data_conclusao = col_data.selectbox(
+            "Migração concluída Mês", ["Selecione", "01/2024", "02/2024"]
+        )
 
     if colaborador == "Selecione":
         df_atual = df
@@ -193,7 +194,7 @@ def container_principal(titulos, valores, cores):
         [col1, col2, col3, col4, col5, col6], titulos, valores, cores
     ):
         with col.container(border=True):
-            st.markdown(f"{titulo.title()}")
+            st.markdown(f"###### {titulo.title()}")
             st.write(f"### :{cor}[{str(valor)}]")
 
 
