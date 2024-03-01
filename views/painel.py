@@ -1,6 +1,7 @@
 import streamlit as st
 from utilidades import *
 import matplotlib.pyplot as plt
+from PIL import Image
 
 
 def painel():
@@ -15,7 +16,6 @@ def painel():
         "FRENTE DE TRABALHO: ".title(), clientes, index=(len(clientes) - 1)
     )
 
-
     if cliente == "Selecione":
         df_atual = df
         cliente_atual = "Total"
@@ -24,19 +24,19 @@ def painel():
         cliente_atual = cliente
 
     coluna1, coluna2 = st.columns(2)
-    plt1 = grafico_pizza(df_atual["SOLUÇÃO PADRÃO"])
+    plt1 = grafico_pizza(df_atual["SOLUÇÃO PADRÃO"], "img/solucao_padrao.png")
     with coluna1.container(border=True):
-        _card_grafico(st, f"SOLUÇÃO PADRÃO - {cliente_atual}".title(), plt1)
+        st.image(plt1, caption="SOLUÇÃO PADRÃO")
     plt.clf()
 
-    plt2 = grafico_pizza(df_atual["STATUS DETALHADO"])
+    plt2 = grafico_pizza(df_atual["STATUS DETALHADO"], "img/status_detalhado.png")
     with coluna2.container(border=True):
-        _card_grafico(st, f"STATUS DETALHADO - {cliente_atual}".title(), plt2)
+        st.image(plt1, caption="STATUS DETALHADO")
 
     contagem_un, contagem_operacao = _contagem_os(df_atual)
     df_migracao = df_atual[(df_atual["STATUS DETALHADO"] == "MIGRAÇÃO CONCLUÍDA")]
     contagem_migracao_concluida = df_migracao["ÁREA RESPONSÁVEL"].value_counts()
-    
+
     try:
         if contagem_operacao.empty:
             contagem_operacao_atual = 0
@@ -44,21 +44,19 @@ def painel():
             contagem_operacao_atual = int(contagem_operacao.iloc[0])
         container_aguard_os_detalhado(
             st,
-            ["Aguard. Abert. OS - UN", "Aguard. Abert. OS - OPERAÇÃO", "MIGRAÇÃO CONCLUÍDA"],
+            [
+                "Aguard. Abert. OS - UN",
+                "Aguard. Abert. OS - OPERAÇÃO",
+                "MIGRAÇÃO CONCLUÍDA",
+            ],
             [
                 int(contagem_un.iloc[0]),
                 contagem_operacao_atual,
-                int(contagem_migracao_concluida.iloc[0])
-                
+                int(contagem_migracao_concluida.iloc[0]),
             ],
         )
     except:
         pass
-
-
-def _card_grafico(col1, titulo, plt):
-    col1.markdown(f"{titulo}")
-    col1.pyplot(plt)
 
 
 def _contagem_os(df_atual):
@@ -73,7 +71,9 @@ def _contagem_os(df_atual):
     return contagem_area_responsavel_un, contagem_area_responsavel_operacao
 
 
-def container_aguard_os_detalhado(coluna, titulos, valores, cores=["orange","blue","green"]):
+def container_aguard_os_detalhado(
+    coluna, titulos, valores, cores=["orange", "blue", "green"]
+):
     with coluna.container():
         col1, col2, col3 = st.columns(3)
         # Loop através das colunass, títulos e valores
@@ -83,7 +83,7 @@ def container_aguard_os_detalhado(coluna, titulos, valores, cores=["orange","blu
                 st.write(f"### :{cor}[{str(valor)}]")
 
 
-def grafico_pizza(coluna):
+def grafico_pizza(coluna, nome_arquivo):
     valores = coluna.value_counts()
     labels = [
         f"{label}: {value}" for label, value in zip(valores.index, valores.values)
@@ -94,4 +94,9 @@ def grafico_pizza(coluna):
     soma_total = sum(valores.values)
     plt.axis("equal")
     plt.legend(title=f"Total:{soma_total}", labels=labels)
-    return plt
+
+    plt.savefig(nome_arquivo)
+
+    img = Image.open(nome_arquivo)
+
+    return img

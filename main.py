@@ -22,12 +22,10 @@ if __name__ == "__main__":
 
     if base_de_migracao is not None:
 
-        df = carregar_dados(base_de_migracao)
-
-        iniciar_dados(df)
+        iniciar_dados(carregar_dados(base_de_migracao))
 
         with st.expander("Menu", expanded=True):
-            col1, col2, col3, col4 = st.columns(4, gap="medium")
+            col1, col2, col3, col4 = st.columns(4)
             col1.button(
                 "Painel De Migração",
                 use_container_width=True,
