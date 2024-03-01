@@ -3,9 +3,8 @@ from utilidades import *
 import matplotlib.pyplot as plt
 
 
-def painel(df):
-
-    # df = st.session_state["dados_excel"]
+def painel():
+    df = st.session_state["dados_excel"]
 
     st.markdown("## Painel :green[De Migração]")
 

@@ -3,6 +3,11 @@ import pandas as pd
 from pathlib import Path
 from time import sleep
 import matplotlib.pyplot as plt
+# import pdfkit
+
+# from matplotlib.backends.backend_pdf import PdfPages
+# from io import BytesIO
+# from PIL import Image
 
 from datetime import datetime
 
@@ -16,6 +21,17 @@ def carregar_dados_meta():
     df_data = pd.read_excel(PASTA_EXCEL / excel, engine="openpyxl", sheet_name="METAS")
     return df_data
 
+
+def iniciar_dados(df):
+
+    if not "dados_excel" in st.session_state:
+        st.session_state["dados_excel"] = df
+
+    if not "dados_metas" in st.session_state:
+        st.session_state["dados_metas"] = carregar_dados_meta()
+
+    if not "pagina_central" in st.session_state:
+        st.session_state["pagina_central"] = "pag_home"
 
 
 def mudar_pagina(pagina):
@@ -63,13 +79,23 @@ def tabela_metas_historico(df, df_metas, mes, col_tabela, farol, col_tabela2):
 
     if farol != "Selecione":
         df_farol_atual = df_farol_filted
+        # Converte o DataFrame para HTML e adiciona a formatação em negrito
+        # df_html = df_farol_atual.to_html().replace(
+        #     "<th>", '<th style="font-weight: bold;">'
+        # )
+        # # Exibe a tabela HTML com st.markdown()
+        # col_tabela.markdown(df_html, unsafe_allow_html=True)
         col_tabela.table(df_farol_atual)
     else:
         df_farol_atual = df_uf
         col_tabela.dataframe(df_farol_atual.iloc[:13], height=493, hide_index=True)
         col_tabela2.dataframe(df_farol_atual.iloc[14:], height=458, hide_index=True)
 
+    # # Converte o DataFrame para HTML
+    # df_html = df_farol_atual.to_html()
 
+    # # Converte o HTML para PDF
+    # pdfkit.from_string(df_html, "dataframe.pdf")
 
 
 def tabela_metas_colaborador(df_mes, df_metas, col_tabela, farol):

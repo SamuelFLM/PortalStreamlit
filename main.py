@@ -12,65 +12,59 @@ def carregar_dados(arquivo):
     return df_data
 
 
-st.set_page_config("Portal", layout="wide")
-with st.sidebar:
-    with st.expander("Base De Migração"):
-        base_de_migracao = st.file_uploader(
-            "Anexar Base De Migração", type=["xlsx"], key="unique_key_1"
-        )
+if __name__ == "__main__":
+    st.set_page_config("Portal", layout="wide")
+    with st.sidebar:
+        with st.expander("Base De Migração"):
+            base_de_migracao = st.file_uploader(
+                "Anexar Base De Migração", type=["xlsx"], key="unique_key_1"
+            )
 
-if base_de_migracao is not None:
+    if base_de_migracao is not None:
 
-    df = carregar_dados(base_de_migracao)
-    
-    if not "dados_excel" in st.session_state:
-        st.session_state["dados_excel"] = df
-        
-    if not "dados_metas" in st.session_state:
-        st.session_state["dados_metas"] = carregar_dados_meta()
+        df = carregar_dados(base_de_migracao)
 
-    if not "pagina_central" in st.session_state:
-        st.session_state["pagina_central"] = "pag_home"    
+        iniciar_dados(df)
 
-    with st.expander("Menu", expanded=True):
-        col1, col2, col3, col4 = st.columns(4, gap="medium")
-        col1.button(
-            "Painel De Migração",
-            use_container_width=True,
-            on_click=mudar_pagina,
-            args=("pag_home",),
-            type="primary",
-        )
-        col2.button(
-            "Base De Migração",
-            use_container_width=True,
-            on_click=mudar_pagina,
-            args=("pag_base_migracao",),
-            type="primary",
-        )
-        col3.button(
-            "Colaborador",
-            use_container_width=True,
-            on_click=mudar_pagina,
-            args=("pag_colaborador",),
-            type="primary",
-        )
-        col4.button(
-            "Histórico",
-            use_container_width=True,
-            on_click=mudar_pagina,
-            args=("pag_historico",),
-            type="primary",
-        )
+        with st.expander("Menu", expanded=True):
+            col1, col2, col3, col4 = st.columns(4, gap="medium")
+            col1.button(
+                "Painel De Migração",
+                use_container_width=True,
+                on_click=mudar_pagina,
+                args=("pag_home",),
+                type="primary",
+            )
+            col2.button(
+                "Base De Migração",
+                use_container_width=True,
+                on_click=mudar_pagina,
+                args=("pag_base_migracao",),
+                type="primary",
+            )
+            col3.button(
+                "Colaborador",
+                use_container_width=True,
+                on_click=mudar_pagina,
+                args=("pag_colaborador",),
+                type="primary",
+            )
+            col4.button(
+                "Histórico",
+                use_container_width=True,
+                on_click=mudar_pagina,
+                args=("pag_historico",),
+                type="primary",
+            )
 
-    if st.session_state["pagina_central"] == "pag_home":
-        painel(df)
+        if st.session_state["pagina_central"] == "pag_home":
+            painel()
 
-    elif st.session_state["pagina_central"] == "pag_base_migracao":
-        base_migracao(df)
+        elif st.session_state["pagina_central"] == "pag_base_migracao":
+            base_migracao()
 
-    elif st.session_state["pagina_central"] == "pag_colaborador":
-        colaborador(df)
+        elif st.session_state["pagina_central"] == "pag_colaborador":
+            colaborador()
 
-    elif st.session_state["pagina_central"] == "pag_historico":
-        historico(df)
+        elif st.session_state["pagina_central"] == "pag_historico":
+            historico()
