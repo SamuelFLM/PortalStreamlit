@@ -18,11 +18,26 @@ def base_migracao():
         status, df_status = filtro_tabela(
             df_colaborador, "STATUS DETALHADO", col2, "Status Detalhado"
         )
+        
+        col1, col2 = st.columns([0.3, 0.3])
+        psrs = list(df_colaborador["PSR"].unique())
+        psrs.append("Selecione")
+        psr = col1.selectbox("PSR", psrs, index=(len(psrs) - 1))
+        df_psr = df_colaborador[df_colaborador["PSR"] == psr]
+        
+        solucoes = list(df_colaborador["SOLUÇÃO PADRÃO"].unique())
+        solucoes.append("Selecione")
+        solucao = col2.selectbox("SOLUÇÃO PADRÃO".title(), solucoes, index=(len(solucoes) - 1))
+        df_solucao_padrao = df_colaborador[df_colaborador["SOLUÇÃO PADRÃO"] == solucao]
 
     if colaborador != "Selecione":
         tabela_atual = df_colaborador
     if status != "Selecione":
         tabela_atual = df_status
+    elif psr != "Selecione":
+        tabela_atual = df_psr
+    elif solucao != "Selecione":
+        tabela_atual = df_solucao_padrao
 
     with filtro2.expander("Pesquisar"):
         st.markdown("Buscar por Circuito (LOTE)")
