@@ -6,7 +6,7 @@ def base_migracao():
     df = st.session_state["dados_excel"]
     tabela_atual = df
 
-    st.markdown("## Base :green[De Migração]")
+    st.markdown("##### Base :green[De Migração]")
 
     filtro1, filtro2 = st.columns(2)
     with filtro1.expander("Filtro"):
@@ -48,7 +48,7 @@ def base_migracao():
         limpar = col2.button("Limpar Filtro", type="primary")
         if btn:
             if circuito.strip():  # Verifique se o campo não está vazio
-                circuitos_inseridos = [c.strip() for c in circuito.split(",")]
+                circuitos_inseridos = [c.strip() for c in circuito.split("\n")]
                 df_filtro = df[df["CIRCUITO"].isin(circuitos_inseridos)]
                 if not df_filtro.empty:
                     tabela_atual = df_filtro

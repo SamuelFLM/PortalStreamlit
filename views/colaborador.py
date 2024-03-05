@@ -17,12 +17,13 @@ colunas = [
 def colaborador():
     df = st.session_state["dados_excel"]
     df_metas = st.session_state["dados_metas"]
-
+    st.markdown("##### :green[Colaborador]")
+    
     with st.expander("Filtro"):
         col_colaborador, col_data, col3 = st.columns([0.3, 0.3, 1])
         colaborador, df_colaborador = _filtro_colaborador(df, col_colaborador)
         data_conclusao = col_data.selectbox(
-            "Migração concluída Mês", ["Selecione", "01/2024", "02/2024"]
+            "Migração concluída Mês", ["01/2024", "02/2024", "03/2024"]
         )
 
     if colaborador == "Selecione":
@@ -138,7 +139,7 @@ def colaborador():
 
         if colaborador != "Selecione":
             col1, col_filtro, col3, col4 = st.columns([0.2, 0.2, 0.4, 0.4])
-            mes = col1.selectbox("Mês", ["Selecione", "01/2024", "02/2024"])
+            mes = col1.selectbox("Mês", ["Selecione", "01/2024", "02/2024", "03/2024"])
 
             df_mes = df_colaborador[df_colaborador["MÊS CONCLUSÃO"] == mes]
             col1, col2, col3 = st.columns([0.8, 0.8, 0.3])

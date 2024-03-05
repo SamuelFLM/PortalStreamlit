@@ -6,7 +6,7 @@ import numpy as np
 def historico():
     df = st.session_state["dados_excel"]
     df_metas = st.session_state["dados_metas"]
-    st.markdown("## Historíco :green[De Migração]")
+    st.markdown("##### Historíco :green[De Migração]")
     
     with st.expander("Filtro"):
         col1, col_mes, col_filtro, col4 = st.columns([0.2, 0.2, 0.2, 0.9])

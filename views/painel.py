@@ -7,7 +7,7 @@ from PIL import Image
 def painel():
     df = st.session_state["dados_excel"]
 
-    st.markdown("## Painel :green[De Migração]")
+    st.markdown("##### Painel :green[De Migração]")
 
     tab_base(df)
 

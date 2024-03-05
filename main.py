@@ -4,6 +4,7 @@ from views.base import *
 from views.colaborador import *
 from views.painel import *
 from views.historico import *
+from views.redea import *
 
 
 @st.cache_data()
@@ -25,7 +26,7 @@ if __name__ == "__main__":
         iniciar_dados(carregar_dados(base_de_migracao))
 
         with st.expander("Menu", expanded=True):
-            col1, col2, col3, col4 = st.columns(4)
+            col1, col2, col3, col4, col5 = st.columns(5)
             col1.button(
                 "Painel De Migração",
                 use_container_width=True,
@@ -54,6 +55,13 @@ if __name__ == "__main__":
                 args=("pag_historico",),
                 type="primary",
             )
+            col5.button(
+                "Painel REDEA",
+                use_container_width=True,
+                on_click=mudar_pagina,
+                args=("pag_readea",),
+                type="primary",
+            )
 
         if st.session_state["pagina_central"] == "pag_home":
             painel()
@@ -66,3 +74,6 @@ if __name__ == "__main__":
 
         elif st.session_state["pagina_central"] == "pag_historico":
             historico()
+
+        elif st.session_state["pagina_central"] == "pag_readea":
+            painel_redea()
