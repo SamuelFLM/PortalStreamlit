@@ -26,7 +26,7 @@ def painel_redea():
                 "CIRCUITO": df_reparos["CIRCUITO"],
                 "CLIENTE": df_reparos["NOME_CLIENTE"],
                 "POSTO": df_reparos["POSTO"],
-                "FAIXA": df_reparos["TEMPO_POSTO_ATUAL"],
+                "FAIXA": df_reparos["TEMPO_ABERTURA"],
             }
         )
 
@@ -37,12 +37,14 @@ def painel_redea():
             
             psr, df_psr = filtro(df_redea, 'PSR',col1,"PSR")
             regional, df_regional = filtro(df_redea, 'REGIONAL',col2,"REGIONAL")
-            col3.selectbox("Faixa", ["Selecione",2],disabled=True)
+            faixa, df_faixa = filtro(df_redea, 'FAIXA',col3,"Faixa")
             df_atual = df_redea
             if psr != "Selecione":
                 df_atual = df_psr
             if regional != "Selecione":
                 df_atual = df_regional
+            if faixa != "Selecione":
+                df_atual = df_faixa
             
             
             st.dataframe(df_atual, hide_index=True)

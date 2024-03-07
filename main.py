@@ -49,7 +49,7 @@ if __name__ == "__main__":
                 type="primary",
             )
             col4.button(
-                "Histórico",
+                "Histórico De Migração",
                 use_container_width=True,
                 on_click=mudar_pagina,
                 args=("pag_historico",),

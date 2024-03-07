@@ -9,39 +9,12 @@ def base_migracao():
     st.markdown("##### Base :green[De Migração]")
 
     filtro1, filtro2 = st.columns(2)
-    with filtro1.expander("Filtro"):
-        col1, col2 = st.columns([0.3, 0.3])
 
-        colaborador, df_colaborador = filtro_tabela(
-            df, "RESPONSÁVEL NOVA OI", col1, "Colaborador"
-        )
-        status, df_status = filtro_tabela(
-            df_colaborador, "STATUS DETALHADO", col2, "Status Detalhado"
-        )
-        
-        col1, col2 = st.columns([0.3, 0.3])
-        psrs = list(df_colaborador["PSR"].unique())
-        psrs.append("Selecione")
-        psr = col1.selectbox("PSR", psrs, index=(len(psrs) - 1))
-        df_psr = df_colaborador[df_colaborador["PSR"] == psr]
-        
-        solucoes = list(df_colaborador["SOLUÇÃO PADRÃO"].unique())
-        solucoes.append("Selecione")
-        solucao = col2.selectbox("SOLUÇÃO PADRÃO".title(), solucoes, index=(len(solucoes) - 1))
-        df_solucao_padrao = df_colaborador[df_colaborador["SOLUÇÃO PADRÃO"] == solucao]
-
-    if colaborador != "Selecione":
-        tabela_atual = df_colaborador
-    if status != "Selecione":
-        tabela_atual = df_status
-    elif psr != "Selecione":
-        tabela_atual = df_psr
-    elif solucao != "Selecione":
-        tabela_atual = df_solucao_padrao
-
-    with filtro2.expander("Pesquisar"):
+    with filtro1.expander("Pesquisar"):
         st.markdown("Buscar por Circuito (LOTE)")
-        st.caption("Lista de Dados (1 por linha) Ex.: GNA 0478965 ou RBO 0418279, RBO 0419313")
+        st.caption(
+            "Lista de Dados (1 por linha) Ex.: GNA 0478965 ou RBO 0418279, RBO 0419313"
+        )
         circuito = st.text_area("")
         col1, col2, col3 = st.columns(3)
         btn = col1.button("Buscar", type="primary")
@@ -58,6 +31,35 @@ def base_migracao():
                 st.warning("Insira um nome de circuito para buscar.")
         elif limpar:
             tabela_atual = df
+
+    with filtro2.expander("Filtro"):
+        col1, col2 = st.columns([0.3, 0.3])
+
+        colaborador, df_colaborador = filtro_tabela(
+            df, "RESPONSÁVEL NOVA OI", col1, "Colaborador"
+        )
+        status, df_status = filtro_tabela(
+            df, "STATUS DETALHADO", col2, "Status Detalhado"
+        )
+
+        psr, df_psr = filtro_tabela(df, "PSR", col1, "PSR")
+        solucao, df_solucao_padrao = filtro_tabela(df, "SOLUÇÃO PADRÃO", col2, "SOLUÇÃO PADRÃO".title())
+        
+        projeto, df_projeto = filtro_tabela(df, "PROJETO", col1, "PROJETO".title())
+        col2.warning("Atualmente, só é possível aplicar um filtro por vez.",icon="🚨")
+        # filial, df_filial = filtro_tabela(df, "FILIAL", col1, "FILIAL".title())
+
+    if colaborador != "Selecione":
+        tabela_atual = df_colaborador
+    if status != "Selecione":
+        tabela_atual = df_status
+    elif psr != "Selecione":
+        tabela_atual = df_psr
+    elif solucao != "Selecione":
+        tabela_atual = df_solucao_padrao
+    elif projeto != "Selecione":
+        tabela_atual = df_projeto
+        
     st.divider()
 
     st.dataframe(tabela_atual)

@@ -6,7 +6,7 @@ import numpy as np
 def historico():
     df = st.session_state["dados_excel"]
     df_metas = st.session_state["dados_metas"]
-    st.markdown("##### Historíco :green[De Migração]")
+    st.markdown("##### Histórico :green[De Migração]")
     
     with st.expander("Filtro"):
         col1, col_mes, col_filtro, col4 = st.columns([0.2, 0.2, 0.2, 0.9])
@@ -43,7 +43,7 @@ def _tabela_2024(df, df_metas, coluna, col_farol):
     # Adição da coluna "Farol" com emojis
     # df_historico["Farol"] = df_historico["Resultado"].apply(lambda x: '🟢' if (x/len(df_filtro_migracao) * 100) >= 10 else ('🟡' if 3 <= (x/len(df_filtro_migracao) * 100) <= 10 else '🔴'))
     df_historico["Farol"] = df_historico["Resultado"].apply(
-        lambda x: "🟢" if x >= 1000 else ("🟡" if x >= 500 else "🔴")
+        lambda x: "✅" if x >= 1000 else ("🟡" if x >= 500 else "🔴")
     )
 
     # Adição da coluna de porcentagem
@@ -57,11 +57,11 @@ def _tabela_2024(df, df_metas, coluna, col_farol):
     df_mes, mes = _filtro(coluna, df_historico, "Mês", "Mês")
 
 
-    col1, col2, col3, col4 = st.columns([0.8,0.9,0.9,0.3])
-    col1.dataframe(df_historico, width=400, hide_index=True)
+    col1, col2, col3 = st.columns([0.9,0.9,0.9])
+    col1.dataframe(df_historico, hide_index=True)
     
     if mes != "Selecione":
-        farol = col_farol.selectbox("Farol", ["Selecione", "🟢", "🔴"])
+        farol = col_farol.selectbox("Farol", ["Selecione", "✅", "🔴"])
         
         tabela_metas_historico(df, df_metas, mes, col2, farol, col3)
        
@@ -96,7 +96,7 @@ def _tabela_2023(df):
     # df_historico["Farol"] = df_historico["Resultado"].apply(lambda x: '🟢' if (x/len(df_filtro_migracao) * 100) >= 10 else ('🟡' if 3 <= (x/len(df_filtro_migracao) * 100) <= 10 else '🔴'))
     df_historico["Farol"] = df_historico["Resultado"].apply(
         lambda x: (
-            "🟢"
+            "✅"
             if x >= 1
             else ("🟡" if 3 <= (x / len(df_filtro_migracao) * 100) <= 10 else "🔴")
         )
