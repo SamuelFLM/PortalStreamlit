@@ -13,19 +13,32 @@ def painel():
 
 def tab_base(df):
     with st.expander("Filtro"):
+        col1, col2, col3 = st.columns([0.25, 0.25, 0.4])
+        
         clientes = list(df["FRENTE DE TRABALHO"].unique())
         clientes.append("Selecione")
-        col1, col2, col3 = st.columns([0.25, 0.6, 0.4])
         cliente = col1.selectbox(
             "FRENTE DE TRABALHO: ".title(), clientes, index=(len(clientes) - 1)
         )
+        df_cliente = df[(df["FRENTE DE TRABALHO"] == cliente)]
+        
+        projetos = list(df_cliente["PROJETO"].unique())
+        projetos.append("Selecione")
+        projeto = col2.selectbox(
+            "PROJETO: ".title(), projetos, index=(len(projetos) - 1)
+        )
+        df_projeto = df_cliente[df_cliente["PROJETO"] == projeto]
 
     if cliente == "Selecione":
         df_atual = df
         cliente_atual = "Total"
     else:
-        df_atual = df[(df["FRENTE DE TRABALHO"] == cliente)]
+        df_atual = df_cliente
         cliente_atual = cliente
+    
+    if projeto != "Selecione":
+        df_atual = df_projeto
+    
 
     coluna1, coluna2 = st.columns(2)
     plt1 = grafico_pizza(df_atual["SOLUÇÃO PADRÃO"], "img/solucao_padrao.png")
@@ -35,7 +48,7 @@ def tab_base(df):
 
     plt2 = grafico_pizza(df_atual["STATUS DETALHADO"], "img/status_detalhado.png")
     with coluna2.container(border=True):
-        st.image(plt1, caption="STATUS DETALHADO")
+        st.image(plt2, caption="STATUS DETALHADO")
 
     contagem_un, contagem_operacao = _contagem_os(df_atual)
     df_migracao = df_atual[(df_atual["STATUS DETALHADO"] == "MIGRAÇÃO CONCLUÍDA")]
