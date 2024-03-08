@@ -69,7 +69,7 @@ def tabela_metas_historico(df, df_metas, mes, col_tabela, farol, col_tabela2):
     df_uf.loc[df_uf["UF"].isin(filial.index), "Resultado"] = filial.values
 
     df_uf["Farol"] = df_uf.apply(
-        lambda row: "✅" if row["Resultado"] >= row["Meta"] else "🔴", axis=1
+        lambda row: "✅" if row["Resultado"] >= row["Meta"] else "❌", axis=1
     )
     df_uf["Porcentagem"] = ((df_uf["Resultado"] / df_uf["Meta"]) * 100).round(2).astype(
         str
@@ -123,7 +123,7 @@ def tabela_metas_colaborador(df_mes, df_metas, col_tabela, farol):
     df_uf.loc[df_uf["UF"].isin(filial.index), "Resultado"] = filial.values
 
     df_uf["Farol"] = df_uf.apply(
-        lambda row: "✅" if row["Resultado"] >= row["Meta"] else "🔴", axis=1
+        lambda row: "✅" if row["Resultado"] >= row["Meta"] else "❌", axis=1
     )
     df_uf["Porcentagem"] = ((df_uf["Resultado"] / df_uf["Meta"]) * 100).round(2).astype(
         str

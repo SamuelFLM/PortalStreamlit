@@ -43,7 +43,7 @@ def _tabela_2024(df, df_metas, coluna, col_farol):
     # Adição da coluna "Farol" com emojis
     # df_historico["Farol"] = df_historico["Resultado"].apply(lambda x: '🟢' if (x/len(df_filtro_migracao) * 100) >= 10 else ('🟡' if 3 <= (x/len(df_filtro_migracao) * 100) <= 10 else '🔴'))
     df_historico["Farol"] = df_historico["Resultado"].apply(
-        lambda x: "✅" if x >= 1000 else ("🟡" if x >= 500 else "🔴")
+        lambda x: "✅" if x >= 1000 else ("🟡" if x >= 500 else "❌")
     )
 
     # Adição da coluna de porcentagem
@@ -61,7 +61,7 @@ def _tabela_2024(df, df_metas, coluna, col_farol):
     col1.dataframe(df_historico, hide_index=True)
     
     if mes != "Selecione":
-        farol = col_farol.selectbox("Farol", ["Selecione", "✅", "🔴"])
+        farol = col_farol.selectbox("Farol", ["Selecione", "✅", "❌"])
         
         tabela_metas_historico(df, df_metas, mes, col2, farol, col3)
        

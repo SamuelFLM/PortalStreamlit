@@ -149,7 +149,7 @@ def colaborador():
                 df_metas["Colaborador"] == colaborador.title()
             ]
             if mes != "Selecione":
-                farol = col_filtro.selectbox("Farol", ["Selecione", "✅", "🔴"])
+                farol = col_filtro.selectbox("Farol", ["Selecione", "✅", "❌"])
                 tabela_metas_colaborador(
                     df_mes, df_metas_filtro_colaborador, col2, farol
                 )
@@ -259,7 +259,7 @@ def _base_mes_meta(df_atual, valor_meta):
     )
 
     base["Farol"] = base["Migração Concluída"].apply(
-        lambda x: "✅" if x >= valor_meta else "🔴"
+        lambda x: "✅" if x >= valor_meta else "❌"
     )
     base["Porcentagem"] = ((base["Migração Concluída"] / valor_meta) * 100).round(
         2
