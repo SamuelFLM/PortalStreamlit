@@ -21,12 +21,12 @@ def painel_redea():
             {
                 "PROTOCOLO": df_reparos["PROTOCOLO"],
                 "PSR": df_reparos["PSR"],
-                "REGIONAL": df_reparos["REGIONAL_VTAL"],
-                "UF": df_reparos["FILIAL"],
-                "CIRCUITO": df_reparos["CIRCUITO"],
-                "CLIENTE": df_reparos["NOME_CLIENTE"],
+                "REGIONAL": df_reparos["REGIONAL"],
+                "UF": df_reparos["UF"],
+                "CIRCUITO": df_reparos["CIRCUITO_BD"],
+                "CLIENTE": df_reparos["CLIENTE"],
                 "POSTO": df_reparos["POSTO"],
-                "FAIXA": df_reparos["TEMPO_ABERTURA"],
+                "FAIXA": df_reparos["FAIXA_POSTO"],
             }
         )
 
@@ -55,19 +55,14 @@ def painel_redea():
 
             df_tratada = contagem.reset_index(name='TOTAL')
             
-            col1, col2, col3 = st.columns(3)
-            
-            psr, df_psr = filtro(df_tratada, 'PSR',col1,"PSR")
-            regional, df_regional = filtro(df_tratada, 'REGIONAL',col2,"REGIONAL")
-            uf, df_uf = filtro(df_tratada, 'UF',col3,"UF")
+            psrs = list(df_tratada['PSR'].unique())
+            psrs.append("Selecione")
+            psr = st.selectbox('PSR', psrs, index=(len(psrs) - 1), key="base_tratada")
+            df_filtrado = df_tratada[df_tratada['PSR'] == psr]
             
             df_atual = df_tratada
             if psr != "Selecione":
-                df_atual = df_psr
-            if regional != "Selecione":
-                df_atual = df_regional
-            if uf != "Selecione":
-                df_atual = df_uf
+                df_atual = df_filtrado
             
             
             st.dataframe(df_atual,width=600, hide_index=True)
