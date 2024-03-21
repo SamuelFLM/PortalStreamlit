@@ -171,7 +171,6 @@ def _controle_de_reparo(col1, col2,col3,col4, nao_contem, contem, data):
                     st.markdown(
                         f"## :blue[{int(contem.iloc[0]) + int(nao_contem.iloc[0])}]"
                     )
-    col4.write(f"Base: {data}")
 
 
 def _contagem_os(df_status):
