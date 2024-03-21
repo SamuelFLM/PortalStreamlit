@@ -64,8 +64,9 @@ def painel_redea():
             if psr != "Selecione":
                 df_atual = df_filtrado
             
-            
-            st.dataframe(df_atual,width=600, hide_index=True)
+            col1, col2 = st.columns(2)
+            col1.dataframe(df_atual,width=600, hide_index=True)
+            col2.warning('Total corresponde a quantidade de registro que a UF tem na tabela.', icon="⚠️")
 
 
 def filtro(df, coluna_df, col_pag, nome_filtro):
