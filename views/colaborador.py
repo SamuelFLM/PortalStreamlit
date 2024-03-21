@@ -115,20 +115,20 @@ def colaborador():
             col1, col2, col3, col4 = st.columns(4)
 
             if colaborador == "Selecione":
-                contem = df_reparos[df_reparos["Migração_2024"] == "Sim"][
+                contem = df_reparos[df_reparos["Migração_2024"] == "S"][
                     "Migração_2024"
                 ].value_counts()
-                nao_contem = df_reparos[df_reparos["Migração_2024"] == "Não"][
+                nao_contem = df_reparos[df_reparos["Migração_2024"] == "N"][
                     "Migração_2024"
                 ].value_counts()
                 _controle_de_reparo(col1,col2,col3,col4,nao_contem,contem,"26 fev")
             else:
                 df_atual_reparos = df_reparos[df_reparos["COLABORADOR"] == colaborador]
 
-                contem = df_atual_reparos[df_atual_reparos["Migração_2024"] == "Sim"][
+                contem = df_atual_reparos[df_atual_reparos["Migração_2024"] == "S"][
                     "Migração_2024"
                 ].value_counts()
-                nao_contem = df_atual_reparos[df_atual_reparos["Migração_2024"] == "Não"][
+                nao_contem = df_atual_reparos[df_atual_reparos["Migração_2024"] == "N"][
                     "Migração_2024"
                 ].value_counts()
                 _controle_de_reparo(col1,col2,col3,col4,nao_contem,contem,"26 fev")
@@ -159,7 +159,7 @@ def colaborador():
 
 def _controle_de_reparo(col1, col2,col3,col4, nao_contem, contem, data):
     with col1.container(border=True):
-                    st.markdown("Não Contem na base de migração")
+                    st.markdown("N Contem na base de migração")
                     st.markdown(f"## :red[{nao_contem}]")
 
     with col2.container(border=True):
