@@ -115,21 +115,21 @@ def colaborador():
             col1, col2, col3, col4 = st.columns(4)
 
             if colaborador == "Selecione":
-                contem = df_reparos[df_reparos["Leonam_2024"] == "Sim"][
-                    "Leonam_2024"
+                contem = df_reparos[df_reparos["Migração_2024"] == "Sim"][
+                    "Migração_2024"
                 ].value_counts()
-                nao_contem = df_reparos[df_reparos["Leonam_2024"] == "Não"][
-                    "Leonam_2024"
+                nao_contem = df_reparos[df_reparos["Migração_2024"] == "Não"][
+                    "Migração_2024"
                 ].value_counts()
                 _controle_de_reparo(col1,col2,col3,col4,nao_contem,contem,"26 fev")
             else:
-                df_atual_reparos = df_reparos[df_reparos["Colaborador"] == colaborador]
+                df_atual_reparos = df_reparos[df_reparos["COLABORADOR"] == colaborador]
 
-                contem = df_atual_reparos[df_atual_reparos["Leonam_2024"] == "Sim"][
-                    "Leonam_2024"
+                contem = df_atual_reparos[df_atual_reparos["Migração_2024"] == "Sim"][
+                    "Migração_2024"
                 ].value_counts()
-                nao_contem = df_atual_reparos[df_atual_reparos["Leonam_2024"] == "Não"][
-                    "Leonam_2024"
+                nao_contem = df_atual_reparos[df_atual_reparos["Migração_2024"] == "Não"][
+                    "Migração_2024"
                 ].value_counts()
                 _controle_de_reparo(col1,col2,col3,col4,nao_contem,contem,"26 fev")
                 
@@ -160,16 +160,16 @@ def colaborador():
 def _controle_de_reparo(col1, col2,col3,col4, nao_contem, contem, data):
     with col1.container(border=True):
                     st.markdown("Não Contem na base de migração")
-                    st.markdown(f"## :red[{nao_contem.iloc[0]}]")
+                    st.markdown(f"## :red[{nao_contem}]")
 
     with col2.container(border=True):
                     st.markdown("Contem na base de migração")
-                    st.markdown(f"## :green[{contem.iloc[0]}]")
+                    st.markdown(f"## :green[{contem}]")
 
     with col3.container(border=True):
                     st.markdown("Total")
                     st.markdown(
-                        f"## :blue[{int(contem.iloc[0]) + int(nao_contem.iloc[0])}]"
+                        f"## :blue[{int(contem) + int(nao_contem)}]"
                     )
     col4.write(f"Base: {data}")
 
