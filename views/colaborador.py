@@ -160,11 +160,11 @@ def colaborador():
 def _controle_de_reparo(col1, col2,col3,col4, nao_contem, contem, data):
     with col1.container(border=True):
                     st.markdown("N Contem na base de migração")
-                    st.markdown(f"## :red[{nao_contem.iloc[0]}]")
+                    st.markdown(f"## :red[{int(nao_contem.iloc[0])}]")
 
     with col2.container(border=True):
                     st.markdown("Contem na base de migração")
-                    st.markdown(f"## :green[{contem.iloc[0]}]")
+                    st.markdown(f"## :green[{int(contem.iloc[0])}]")
 
     with col3.container(border=True):
                     st.markdown("Total")
